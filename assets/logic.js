@@ -15,7 +15,7 @@ var startscrn = document.getElementById('start-screen');
 var endscrn = document.getElementById('end-screen');
 var scores = document.getElementById('scores');
 var timerID = 0;
-
+var score = 0;
 
 // sound effects
 var sfxRight = new Audio('assets/correct.wav');
@@ -66,60 +66,67 @@ function getQuestion() { //this function is going to get the data from the quest
             var btn = document.createElement("button");
             var t = document.createTextNode(currentQuestion.choices[i]);
             btn.appendChild(t);
-            document.body.appendChild(btn);
+           choicesEl.appendChild(btn);
          }
     
  }
-           
+       
     
 
 
 function questionClick(event) {
+  
     var currentQuestion = questions[currentQuestionIndex];
     var buttonEl = event.target;
-
+    console.log (currentQuestion.answer);
     // if the clicked element is not a choice button, do nothing.
-    if (!buttonEl.matches(currentQuestion.choices)) {
-        return;
-    }
+    // if (!buttonEl.textContent.matches(currentQuestion.choices.textContent)) {
+    //     return;
+    // }
 
     // check if user guessed right or wrong
-    if (buttonEl != currentQuestion.answer) { //replace true with a conditional statement that checks if the clicked choice button's value is the same as the questions[currentQuestionIndex]'s answer
-        //incorrect answer scenario
-        sfxWrong.play();
-        time = time - 10;
-        timerEl.textContent = time;
-        // penalize time
-        // display new time on page
-    } else {
-        //correct scenario
+    if (buttonEl.textContent === currentQuestion.answer) { //replace true with a conditional statement that checks if the clicked choice button's value is the same as the questions[currentQuestionIndex]'s answer
+        //correct answer scenario
         sfxRight.play();
+        score++;
+        currentQuestionIndex++;
+       
+    } else {
+        sfxWrong.play();
+        time = time - 15;
+        timerEl.textContent = time;
+        //incorrect scenario
+         // penalize time
         // move to next question
-    }
+     // display new time on page
     // flash right/wrong feedback on page
-
-    // move to next question
     currentQuestionIndex++;
-
+    // move to next question
+    }
+    
+    
     // check if we've run out of questions
     if (time <= 0 || currentQuestionIndex === questions.length) {
         quizEnd();
     } else {
+        
         getQuestion();
     }
-}
 
+}
 function quizEnd() {
+    console.log (score);
     // stop timer
-    clearInterval(timerId);
+    clearInterval(timerID);
 
     // show end screen
-    var endScreenEl = document.getElementById('end-screen');
-    endScreenEl.removeAttribute('class');
-
+    // var endScreenEl = document.getElementById('end-screen');
+    // endScreenEl.removeAttribute('class');
+    endscrn.style.display = 'block';
+    questionsEl.style.display = 'none';
     // show final score
     var finalScoreEl = document.getElementById('final-score');
-    finalScoreEl.textContent = time;
+    finalScoreEl.textContent = score;
 
     // hide questions section
     questionsEl.setAttribute('class', 'hide');
@@ -131,15 +138,23 @@ function quizEnd() {
 function saveHighscore() {
     // get value of input box
     var initials = initialsEl.value.trim();
-
+  
     // make sure value wasn't empty
     if (initials !== '') {
 
-        //JSON.parse
         // get saved scores from localstorage (highscores), or if not any, set to empty array
-        
+
+        var highscores = JSON.parse(window.localStorage.getItem('highscores')) || [];
 
         // format new score object for current user
+
+        var newScore = {
+            score,
+            initials
+        };
+
+        highscores.push(newScore);
+        window.localStorage.setItem('highscores', JSON.stringify(highscores));
         
 
         // save to localstorage
