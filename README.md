@@ -19,3 +19,8 @@ This was a significant increase in difficulty versus the previous challenges, ev
 
 Due to the effort in creating this code, as well as external time restraints, this code contains almost no CSS formatting and is presented in a plain HTML text format. It is my plan to remedy this and add appropriate styling to make the quiz more appealing and user friendly and resubmitting when time allows.
 
+<img src="/assets/Quiz-Start.png" title= "Quiz Start Page">
+
+<img src="/assets/Quiz-Sample.png" title= "Quiz Question Sample Page">
+
+<img src="/assets/Quiz-High-Scores.png" title= "Quiz High Scores Page">
